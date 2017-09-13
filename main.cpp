@@ -1,24 +1,21 @@
 #include "mbed.h"
 #include "rtos.h"
  
-DigitalOut led1(LED1);
-DigitalOut led2(LED2);
-DigitalOut led3(LED3);
-Thread thread;
- 
-void led2_thread() {
-    while (true) {
-        led2 = !led2;
-        Thread::wait(1000);
-    }
-}
- 
+
+DigitalIn  button1(p15);
+DigitalIn  button2(p16);
+
+AnalogIn   pot1(p19);
+AnalogIn 	 pot2(p20);
+
+Serial pc(USBTX,USBRX);
+
 int main() {
-	led3 = 1;
-    thread.start(led2_thread);
-    
-    while (true) {
-        led1 = !led1;
-        Thread::wait(500);
-    }
+	while(1){
+		pc.printf("Pot1 : %d\n\r", pot1.read_u16());
+		pc.printf("Pot2 : %d\n\r", pot2.read_u16());
+		pc.printf("Button1: %d\n\r", button1.read());
+		pc.printf("Button2 :%d\n\r", button2.read());
+		wait(1);
+	}
 }

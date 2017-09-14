@@ -55,60 +55,38 @@ void lecture_num() {
     // lecture des échantillons numériques
     // prise en charge du phénomène de rebond
     // génération éventuelle d'un événement
-        acquisition = !acquisition;
-        
-        if(debounce2){
-                if(bouton2 == 1){
-                bouton2 = en_2.read();
-                if(bouton2 == 1){
-                    debounce2 = false;
-                    led2=1;
-                    pc.printf("Event push bouton2\n\r");
-                }
-            }else{
-                bouton2 = en_2.read();
-                if(bouton2 == 0){
-                    debounce2 = false;
-                    led2=0;
-                    pc.printf("Event release bouton2\n\r");
-                }
+        if(debounce1 && bouton1 == en_1.read())
+        {
+            Thread::wait(50); //prob avec 2
+            if(bouton1 == en_1.read())
+            {
+                debounce1 = false;
+                led1 = bouton1;
             }
         }
-        
-        if(debounce1){
-            if(bouton1 == 1){
-                bouton1 = en_1.read();
-                if(bouton1 == 1){
-                    debounce1 = false;
-                    led1=1;
-                    pc.printf("Event push bouton1\n\r");
-                }
-            }else{
-                bouton1 = en_1.read();
-                if(bouton1 == 0){
-                    debounce1 = false;
-                    led1 = 0;
-                    pc.printf("Event release bouton1\n\r");
-                }
+        if(debounce2 && bouton2 == en_2.read())
+        {
+            Thread::wait(50); //prob avec 1
+            if(bouton2 == en_2.read())
+            {
+                debounce2 = false;
+                led2 = bouton2;
             }
         }
 
+        bouton1 = en_1.read();
+        bouton1 = en_2.read();
         
-        if(acquisition){
-            int last_state1 = bouton1;
-            int last_state2 = bouton2;
+        if(bouton1 != en_1.read())
+        {
             bouton1 = en_1.read();
-            bouton2 = en_2.read();
-            
-            if(bouton1 != last_state1){
-                debounce1 = true;
-            }
-            if(bouton2 != last_state2){
-                debounce2 = true;
-            }    
+            debounce1 = true;
         }
-        
-        Thread::wait(50);
+        if(bouton2 != en_2.read())
+        {
+            bouton2 = en_2.read();
+            debounce2 = true;
+        }
     }
 }
 void collection(void const *args) {

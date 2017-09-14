@@ -49,7 +49,6 @@ void lecture_num() {
     int bouton1 = 0;
     int bouton2 = 0;
     while (true) {
-    //    pc.printf("Test");
     // synchronisation sur la période d'échantillonnage
     // lecture de l'étampe temporelle
     // lecture des échantillons numériques
@@ -58,41 +57,28 @@ void lecture_num() {
         acquisition = !acquisition;
         
         if(debounce2){
-                if(bouton2 == 1){
-                bouton2 = en_2.read();
-                if(bouton2 == 1){
-                    debounce2 = false;
-                    led2=1;
-                    pc.printf("Event push bouton2\n\r");
+            if(bouton2 == 1 && en_2.read() == 1){
+                debounce2 = false;
+                led2=1;
+                pc.printf("Event push bouton2\n\r");
+            }else if(en_2.read() == 0){
+                debounce2 = false;
+                led2=0;
+                pc.printf("Event release bouton2\n\r");
                 }
-            }else{
-                bouton2 = en_2.read();
-                if(bouton2 == 0){
-                    debounce2 = false;
-                    led2=0;
-                    pc.printf("Event release bouton2\n\r");
-                }
-            }
         }
         
         if(debounce1){
-            if(bouton1 == 1){
-                bouton1 = en_1.read();
-                if(bouton1 == 1){
-                    debounce1 = false;
-                    led1=1;
-                    pc.printf("Event push bouton1\n\r");
+            if(bouton1 == 1 && en_1.read() == 1){
+                debounce1 = false;
+                led1=1;
+                pc.printf("Event push bouton2\n\r");
+            }else if(en_1.read() == 0){
+                debounce1 = false;
+                led1=0;
+                pc.printf("Event release bouton2\n\r");
                 }
-            }else{
-                bouton1 = en_1.read();
-                if(bouton1 == 0){
-                    debounce1 = false;
-                    led1 = 0;
-                    pc.printf("Event release bouton1\n\r");
-                }
-            }
         }
-
         
         if(acquisition){
             int last_state1 = bouton1;

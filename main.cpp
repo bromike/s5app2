@@ -22,24 +22,30 @@ Thread task1;
 Thread task2;
 Thread task3;
 
-string time_converter(int16_t time)
+void time_converter(int16_t time)
 {
     int a = time / 31557600;
     time = 31557600 * a;
     int m = time / 2630000;
     time = 2630000 * m;
+    int j = time / 86400;
+    time = 86400 * j;
+    int h = time / 3600;
+    time = 3600 * h;
+    int mm = time / 60;
+    time = 60 * mm;
     
     //AA:MM:JJ:HH:MM:SS
-    return "  ";
+    pc.printf("%d:%d:%d:%d:%d:%d", a, m, j, h, mm, time);
 }
 
 void lecture_analog(void const *args) {
     while (true) {
-    // synchronisation sur la période d'échantillonnage
-    // lecture de l'étampe temporelle
-    // lecture des échantillons analogiques
-    // calcul de la nouvelle moyenne courante
-    // génération éventuelle d'un événement
+        // synchronisation sur la période d'échantillonnage
+        // lecture de l'étampe temporelle
+        // lecture des échantillons analogiques
+        // calcul de la nouvelle moyenne courante
+        // génération éventuelle d'un événement
     }
 }
 void lecture_num() {
@@ -49,50 +55,22 @@ void lecture_num() {
     int bouton1 = 0;
     int bouton2 = 0;
     while (true) {
-    //    pc.printf("Test");
-    // synchronisation sur la période d'échantillonnage
-    // lecture de l'étampe temporelle
-    // lecture des échantillons numériques
-    // prise en charge du phénomène de rebond
-    // génération éventuelle d'un événement
+        // synchronisation sur la période d'échantillonnage
+        // lecture de l'étampe temporelle
+        // lecture des échantillons numériques
+        // prise en charge du phénomène de rebond
+        // génération éventuelle d'un événement
         acquisition = !acquisition;
         
         if(debounce2){
-                if(bouton2 == 1){
-                bouton2 = en_2.read();
-                if(bouton2 == 1){
-                    debounce2 = false;
-                    led2=1;
-                    pc.printf("Event push bouton2\n\r");
-                }
-            }else{
-                bouton2 = en_2.read();
-                if(bouton2 == 0){
-                    debounce2 = false;
-                    led2=0;
-                    pc.printf("Event release bouton2\n\r");
-                }
-            }
+            led2 = bouton2 = en_2.read();
+            debounce2 = false;
         }
         
         if(debounce1){
-            if(bouton1 == 1){
-                bouton1 = en_1.read();
-                if(bouton1 == 1){
-                    debounce1 = false;
-                    led1=1;
-                    pc.printf("Event push bouton1\n\r");
-                }
-            }else{
-                bouton1 = en_1.read();
-                if(bouton1 == 0){
-                    debounce1 = false;
-                    led1 = 0;
-                    pc.printf("Event release bouton1\n\r");
-                }
-            }
+            led1 = bouton1 = en_1.read();
+            debounce1 = false;
         }
-
         
         if(acquisition){
             int last_state1 = bouton1;
@@ -100,12 +78,8 @@ void lecture_num() {
             bouton1 = en_1.read();
             bouton2 = en_2.read();
             
-            if(bouton1 != last_state1){
-                debounce1 = true;
-            }
-            if(bouton2 != last_state2){
-                debounce2 = true;
-            }    
+            debounce1 = bouton1 != last_state1;
+            debounce2 = bouton2 != last_state2;
         }
         
         Thread::wait(50);
@@ -113,14 +87,14 @@ void lecture_num() {
 }
 void collection(void const *args) {
     while (true) {
-    // attente et lecture d'un événement
-    // écriture de l'événement en sortie (port série)
+        // attente et lecture d'un événement
+        // écriture de l'événement en sortie (port série)
     }
 }
 int main() {
-//    task1.start(lecture_analog);
+    //task1.start(lecture_analog);
     task2.start(lecture_num);
-//    task3.start(collection);
+    //task3.start(collection);
     while(1) {
     }
 }

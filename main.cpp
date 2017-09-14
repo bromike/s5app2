@@ -14,6 +14,8 @@ AnalogIn ea_1(p19);
 AnalogIn ea_2(p20);
 DigitalOut led1(LED1);
 DigitalOut led2(LED2);
+DigitalOut led3(LED3);
+DigitalOut led4(LED4);
 Queue<uint32_t, 5> queue;
 Mail<mail_t, 16> mailbox;
 Ticker timer;
@@ -77,9 +79,8 @@ void lecture_num() {
             int last_state2 = bouton2;
             bouton1 = en_1.read();
             bouton2 = en_2.read();
-            
-            debounce1 = bouton1 != last_state1;
-            debounce2 = bouton2 != last_state2;
+            led3 = debounce1 = bouton1 != last_state1;
+            led4 = debounce2 = bouton2 != last_state2;
         }
         
         Thread::wait(50);
